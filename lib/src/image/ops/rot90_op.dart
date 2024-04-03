@@ -19,7 +19,7 @@ class Rot90Op extends ImageOperator {
   @override
   TensorImage apply(TensorImage image) {
     // Image rotated = copyRotate(image.image, angle: 90 * _numRotation);
-    Image rotated = copyRotate(image.image, 90 * _numRotation);
+    Image rotated = copyRotate(image.image, angle: 90 * _numRotation);
     image.loadImage(rotated);
     return image;
   }
@@ -35,8 +35,7 @@ class Rot90Op extends ImageOperator {
   }
 
   @override
-  Point inverseTransform(
-      Point point, int inputImageHeight, int inputImageWidth) {
+  Point inverseTransform(Point point, int inputImageHeight, int inputImageWidth) {
     int inverseNumRotation = (4 - _numRotation) % 4;
     int height = getOutputImageHeight(inputImageHeight, inputImageWidth);
     int width = getOutputImageWidth(inputImageHeight, inputImageWidth);

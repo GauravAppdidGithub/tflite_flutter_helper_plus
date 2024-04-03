@@ -23,10 +23,9 @@ class ResizeWithCropOrPadOp implements ImageOperator {
   /// Creates a ResizeWithCropOrPadOp which could crop/pad images to height: [_targetHeight] &
   /// width: [_targetWidth]. It adopts center-crop and zero-padding.
   /// You can pass whith [_cropLeft] and [_cropTop] top-left position of a crop to overide the default centered one.
-  ResizeWithCropOrPadOp(this._targetHeight, this._targetWidth,
-      [this._cropLeft, this._cropTop])
+  ResizeWithCropOrPadOp(this._targetHeight, this._targetWidth, [this._cropLeft, this._cropTop])
       // : _output = Image(width:_targetWidth, height:_targetHeight);
-      : _output = Image(_targetWidth, _targetHeight);
+      : _output = Image(width: _targetWidth, height: _targetHeight);
 
   /// Applies the defined resizing with cropping or/and padding on [image] and returns the
   /// result.
@@ -63,8 +62,7 @@ class ResizeWithCropOrPadOp implements ImageOperator {
       dstR = _targetWidth;
       // custom crop position. First item of the tuple represent the desired position for left position
       // and the second item the right position
-      Tuple2<int, int> cropPos =
-          _computeCropPosition(_targetWidth, w, cropWidthCustomPosition);
+      Tuple2<int, int> cropPos = _computeCropPosition(_targetWidth, w, cropWidthCustomPosition);
       srcL = cropPos.item1;
       srcR = cropPos.item2;
     }
@@ -80,29 +78,20 @@ class ResizeWithCropOrPadOp implements ImageOperator {
       dstB = _targetHeight;
       // custom crop position. First item of the tuple represent the desired position for top position
       // and the second item the bottom position
-      Tuple2<int, int> cropPos =
-          _computeCropPosition(_targetHeight, h, cropHeightCustomPosition);
+      Tuple2<int, int> cropPos = _computeCropPosition(_targetHeight, h, cropHeightCustomPosition);
       srcT = cropPos.item1;
       srcB = cropPos.item2;
     }
 
     Image resized = _drawImage(_output, image.image,
-        dstX: dstL,
-        dstY: dstT,
-        dstH: dstB - dstT,
-        dstW: dstR - dstL,
-        srcX: srcL,
-        srcY: srcT,
-        srcH: srcB - srcT,
-        srcW: srcR - srcL);
+        dstX: dstL, dstY: dstT, dstH: dstB - dstT, dstW: dstR - dstL, srcX: srcL, srcY: srcT, srcH: srcB - srcT, srcW: srcR - srcL);
 
     image.loadImage(resized);
 
     return image;
   }
 
-  Tuple2<int, int> _computeCropPosition(int targetSize, int imageSize,
-      [int? cropPosition]) {
+  Tuple2<int, int> _computeCropPosition(int targetSize, int imageSize, [int? cropPosition]) {
     int srcLT;
     int srcRB;
 
@@ -119,10 +108,8 @@ class ResizeWithCropOrPadOp implements ImageOperator {
   // This function is used to check the crop custom crop position is valid
   void _checkCropPositionArgument(int w, int h) {
     // Ensure both are null or non-null at the same time else throw argument error.
-    if ((_cropLeft == null && _cropTop != null) ||
-        (_cropLeft != null && _cropTop == null)) {
-      throw ArgumentError(
-          "Crop position argument (_cropLeft, _cropTop) is invalid, got: ($_cropLeft, $_cropTop)");
+    if ((_cropLeft == null && _cropTop != null) || (_cropLeft != null && _cropTop == null)) {
+      throw ArgumentError("Crop position argument (_cropLeft, _cropTop) is invalid, got: ($_cropLeft, $_cropTop)");
     }
 
     // Check crop position input if both provided
@@ -148,10 +135,8 @@ class ResizeWithCropOrPadOp implements ImageOperator {
   }
 
   @override
-  Point inverseTransform(
-      Point point, int inputImageHeight, int inputImageWidth) {
-    return _transformImpl(
-        point, _targetHeight, _targetWidth, inputImageHeight, inputImageWidth);
+  Point inverseTransform(Point point, int inputImageHeight, int inputImageWidth) {
+    return _transformImpl(point, _targetHeight, _targetWidth, inputImageHeight, inputImageWidth);
   }
 
   Point _transformImpl(Point point, int srcH, int srcW, int dstH, int dstW) {
@@ -159,15 +144,7 @@ class ResizeWithCropOrPadOp implements ImageOperator {
   }
 
   Image _drawImage(Image dst, Image src,
-      {int? dstX,
-      int? dstY,
-      int? dstW,
-      int? dstH,
-      int? srcX,
-      int? srcY,
-      int? srcW,
-      int? srcH,
-      bool blend = false}) {
+      {int? dstX, int? dstY, int? dstW, int? dstH, int? srcX, int? srcY, int? srcW, int? srcH, bool blend = false}) {
     dstX ??= 0;
     dstY ??= 0;
     srcX ??= 0;

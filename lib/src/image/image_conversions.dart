@@ -15,7 +15,7 @@ class ImageConversions {
     int h = rgb.getHeight(shape);
     int w = rgb.getWidth(shape);
     // Image image = Image(width:w, height:h);
-    Image image = Image(w, h);
+    Image image = Image(width: w, height: h);
 
     List<int> rgbValues = buffer.getIntList();
     assert(rgbValues.length == w * h * 3);
@@ -38,9 +38,7 @@ class ImageConversions {
 
   static Image convertGrayscaleTensorBufferToImage(TensorBuffer buffer) {
     // Convert buffer into Uint8 as needed.
-    TensorBuffer uint8Buffer = buffer.getDataType() == TfLiteType.uint8
-        ? buffer
-        : TensorBuffer.createFrom(buffer, TfLiteType.uint8);
+    TensorBuffer uint8Buffer = buffer.getDataType() == TfLiteType.uint8 ? buffer : TensorBuffer.createFrom(buffer, TfLiteType.uint8);
 
     final shape = uint8Buffer.getShape();
     const grayscale = ColorSpaceType.grayscale;
@@ -48,8 +46,13 @@ class ImageConversions {
 
     // final image = Image.fromBytes(width: grayscale.getWidth(shape), height: grayscale.getHeight(shape),
     //     bytes: uint8Buffer.getBuffer(), format: Format.luminance);
-final image = Image.fromBytes(grayscale.getWidth(shape), grayscale.getHeight(shape),
-        uint8Buffer.getBuffer().asUint8List(), format: Format.luminance);
+    final image = Image.fromBytes(
+        width: grayscale.getWidth(shape),
+        height: grayscale.getHeight(shape),
+        // uint8Buffer.getBuffer().asUint8List(),
+        bytes: uint8Buffer.getBuffer(),
+        // format: Format.luminance,
+        numChannels: 1);
 
     return image;
   }
@@ -57,7 +60,7 @@ final image = Image.fromBytes(grayscale.getWidth(shape), grayscale.getHeight(sha
   static void convertImageToTensorBuffer(Image image, TensorBuffer buffer) {
     int w = image.width;
     int h = image.height;
-    List<int> intValues = image.data;
+    List<int> intValues = image.data?.toUint8List() ?? [];
     int flatSize = w * h * 3;
     List<int> shape = [h, w, 3];
     switch (buffer.getDataType()) {
@@ -80,8 +83,7 @@ final image = Image.fromBytes(grayscale.getWidth(shape), grayscale.getHeight(sha
         buffer.loadList(floatArr, shape: shape);
         break;
       default:
-        throw StateError(
-            "${buffer.getDataType()} is unsupported with TensorBuffer.");
+        throw StateError("${buffer.getDataType()} is unsupported with TensorBuffer.");
     }
   }
 }

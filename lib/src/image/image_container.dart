@@ -24,10 +24,18 @@ class ImageContainer extends BaseImageContainer {
 
   @override
   ColorSpaceType get colorSpaceType {
-    int len = _image.data.length;
+    int len = _image.data?.length ?? 0;
     bool isGrayscale = true;
-    for (int i = (len / 4).floor(); i < _image.data.length; i++) {
-      if (_image.data[i] != 0) {
+    for (int i = (len / 4).floor(); i < (_image.data?.toUint8List().length ?? 0); i++) {
+//       if (_image.data![i] != 0) {
+// //         Uint32List data
+// // Type: Uint32List
+// // package:image/src/image.dart
+// // Pixels are encoded into 4-byte Uint32 integers in #AABBGGRR channel order.
+//         isGrayscale = false;
+//         break;
+//       }
+      if (_image.data!.toUint8List()[i] != 0) {
         isGrayscale = false;
         break;
       }
@@ -53,8 +61,7 @@ class ImageContainer extends BaseImageContainer {
   Image get image => _image;
 
   @override
-  CameraImage get mediaImage => throw UnsupportedError(
-      'Converting from Image to CameraImage is unsupported');
+  CameraImage get mediaImage => throw UnsupportedError('Converting from Image to CameraImage is unsupported');
 
   @override
   int get width => _image.width;

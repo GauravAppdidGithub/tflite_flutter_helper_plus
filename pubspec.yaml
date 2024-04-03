@@ -19,7 +19,8 @@ dependencies:
   tflite_flutter_plus: ^0.0.1
   tuple: ^2.0.1
   camera: ^0.10.4
-  image: ^3.3.0
+  # image: ^3.3.0
+  image: ^4.1.7
 
 dev_dependencies:
   flutter_test:
